@@ -1,0 +1,671 @@
+
+onnx.quantize0.1.0:Ç™
+»
+feature_maps.0.bias_quantized
+#feature_maps.0.bias_quantized_scale
+(feature_maps.0.bias_quantized_zero_pointfeature_maps.0.bias$feature_maps.0.bias_DequantizeLinear"DequantizeLinear
+É
+feature_maps.0.weight_quantized
+feature_maps.0.weight_scale
+ feature_maps.0.weight_zero_point-feature_maps.0.weight_DequantizeLinear_Output&feature_maps.0.weight_DequantizeLinear"DequantizeLinear
+»
+feature_maps.2.bias_quantized
+#feature_maps.2.bias_quantized_scale
+(feature_maps.2.bias_quantized_zero_pointfeature_maps.2.bias$feature_maps.2.bias_DequantizeLinear"DequantizeLinear
+É
+feature_maps.2.weight_quantized
+feature_maps.2.weight_scale
+ feature_maps.2.weight_zero_point-feature_maps.2.weight_DequantizeLinear_Output&feature_maps.2.weight_DequantizeLinear"DequantizeLinear
+i
+input
+input_scale
+input_zero_pointinput_QuantizeLinear_Outputinput_QuantizeLinear"QuantizeLinear
+¬
+sub_pixel.0.bias_quantized
+ sub_pixel.0.bias_quantized_scale
+%sub_pixel.0.bias_quantized_zero_pointsub_pixel.0.bias!sub_pixel.0.bias_DequantizeLinear"DequantizeLinear
+º
+sub_pixel.0.weight_quantized
+sub_pixel.0.weight_scale
+sub_pixel.0.weight_zero_point*sub_pixel.0.weight_DequantizeLinear_Output#sub_pixel.0.weight_DequantizeLinear"DequantizeLinear
+…
+input_QuantizeLinear_Output
+input_scale
+input_zero_pointinput_DequantizeLinear_Outputinput_DequantizeLinear"DequantizeLinear
+¦
+
+input_DequantizeLinear_Output
+-feature_maps.0.weight_DequantizeLinear_Output
+feature_maps.0.biasconv2dnode_conv2d"Conv*
+group *
+pads@@@@ *
+auto_pad"NOTSET *
+strides@@ *
+	dilations@@ JŸ
+	namespace‘: models.espcn.ESPCN/feature_maps: torch.nn.modules.container.Sequential/feature_maps.0: torch.nn.modules.conv.Conv2d/conv2d: aten.conv2d.defaultJ˜
+pkg.torch.onnx.class_hierarchyv['models.espcn.ESPCN', 'torch.nn.modules.container.Sequential', 'torch.nn.modules.conv.Conv2d', 'aten.conv2d.default']JÄ
+pkg.torch.onnx.fx_node©%conv2d : [num_users=1] = call_function[target=torch.ops.aten.conv2d.default](args = (%x, %p_feature_maps_0_weight, %p_feature_maps_0_bias, [1, 1], [2, 2]), kwargs = {})JN
+pkg.torch.onnx.name_scopes0['', 'feature_maps', 'feature_maps.0', 'conv2d']Jó
+pkg.torch.onnx.stack_traceÔFile "/home/federico/super-resolution-project/src/models/espcn.py", line 22, in forward
+    x = self.feature_maps(x)
+  File "/home/federico/super-resolution-project/venv/lib/python3.12/site-packages/torch/nn/modules/container.py", line 253, in forward
+    input = module(input)
+  File "/home/federico/super-resolution-project/venv/lib/python3.12/site-packages/torch/nn/modules/conv.py", line 565, in forward
+    return self._conv_forward(input, self.weight, self.bias)
+n
+conv2d
+conv2d_scale
+conv2d_zero_pointconv2d_QuantizeLinear_Outputconv2d_QuantizeLinear"QuantizeLinear
+Š
+conv2d_QuantizeLinear_Output
+conv2d_scale
+conv2d_zero_pointconv2d_DequantizeLinear_Outputconv2d_DequantizeLinear"DequantizeLinear
+¦
+conv2d_DequantizeLinear_Outputtanh	node_tanh"TanhJŸ
+	namespace‘: models.espcn.ESPCN/feature_maps: torch.nn.modules.container.Sequential/feature_maps.1: torch.nn.modules.activation.Tanh/tanh: aten.tanh.defaultJš
+pkg.torch.onnx.class_hierarchyx['models.espcn.ESPCN', 'torch.nn.modules.container.Sequential', 'torch.nn.modules.activation.Tanh', 'aten.tanh.default']Jƒ
+pkg.torch.onnx.fx_nodei%tanh : [num_users=1] = call_function[target=torch.ops.aten.tanh.default](args = (%conv2d,), kwargs = {})JL
+pkg.torch.onnx.name_scopes.['', 'feature_maps', 'feature_maps.1', 'tanh']JÙ
+pkg.torch.onnx.stack_traceºFile "/home/federico/super-resolution-project/src/models/espcn.py", line 22, in forward
+    x = self.feature_maps(x)
+  File "/home/federico/super-resolution-project/venv/lib/python3.12/site-packages/torch/nn/modules/container.py", line 253, in forward
+    input = module(input)
+  File "/home/federico/super-resolution-project/venv/lib/python3.12/site-packages/torch/nn/modules/activation.py", line 432, in forward
+    return torch.tanh(input)
+d
+tanh
+
+tanh_scale
+tanh_zero_pointtanh_QuantizeLinear_Outputtanh_QuantizeLinear"QuantizeLinear
+€
+tanh_QuantizeLinear_Output
+
+tanh_scale
+tanh_zero_pointtanh_DequantizeLinear_Outputtanh_DequantizeLinear"DequantizeLinear
+²
+
+tanh_DequantizeLinear_Output
+-feature_maps.2.weight_DequantizeLinear_Output
+feature_maps.2.biasconv2d_1node_conv2d_1"Conv*
+group *
+pads@@@@ *
+auto_pad"NOTSET *
+strides@@ *
+	dilations@@ J¡
+	namespace“: models.espcn.ESPCN/feature_maps: torch.nn.modules.container.Sequential/feature_maps.2: torch.nn.modules.conv.Conv2d/conv2d_1: aten.conv2d.defaultJ˜
+pkg.torch.onnx.class_hierarchyv['models.espcn.ESPCN', 'torch.nn.modules.container.Sequential', 'torch.nn.modules.conv.Conv2d', 'aten.conv2d.default']JÉ
+pkg.torch.onnx.fx_node®%conv2d_1 : [num_users=1] = call_function[target=torch.ops.aten.conv2d.default](args = (%tanh, %p_feature_maps_2_weight, %p_feature_maps_2_bias, [1, 1], [1, 1]), kwargs = {})JP
+pkg.torch.onnx.name_scopes2['', 'feature_maps', 'feature_maps.2', 'conv2d_1']Jó
+pkg.torch.onnx.stack_traceÔFile "/home/federico/super-resolution-project/src/models/espcn.py", line 22, in forward
+    x = self.feature_maps(x)
+  File "/home/federico/super-resolution-project/venv/lib/python3.12/site-packages/torch/nn/modules/container.py", line 253, in forward
+    input = module(input)
+  File "/home/federico/super-resolution-project/venv/lib/python3.12/site-packages/torch/nn/modules/conv.py", line 565, in forward
+    return self._conv_forward(input, self.weight, self.bias)
+x
+conv2d_1
+conv2d_1_scale
+conv2d_1_zero_pointconv2d_1_QuantizeLinear_Outputconv2d_1_QuantizeLinear"QuantizeLinear
+”
+conv2d_1_QuantizeLinear_Output
+conv2d_1_scale
+conv2d_1_zero_point conv2d_1_DequantizeLinear_Outputconv2d_1_DequantizeLinear"DequantizeLinear
+´
+ conv2d_1_DequantizeLinear_Outputtanh_1node_tanh_1"TanhJ¡
+	namespace“: models.espcn.ESPCN/feature_maps: torch.nn.modules.container.Sequential/feature_maps.3: torch.nn.modules.activation.Tanh/tanh_1: aten.tanh.defaultJš
+pkg.torch.onnx.class_hierarchyx['models.espcn.ESPCN', 'torch.nn.modules.container.Sequential', 'torch.nn.modules.activation.Tanh', 'aten.tanh.default']J‡
+pkg.torch.onnx.fx_nodem%tanh_1 : [num_users=1] = call_function[target=torch.ops.aten.tanh.default](args = (%conv2d_1,), kwargs = {})JN
+pkg.torch.onnx.name_scopes0['', 'feature_maps', 'feature_maps.3', 'tanh_1']JÙ
+pkg.torch.onnx.stack_traceºFile "/home/federico/super-resolution-project/src/models/espcn.py", line 22, in forward
+    x = self.feature_maps(x)
+  File "/home/federico/super-resolution-project/venv/lib/python3.12/site-packages/torch/nn/modules/container.py", line 253, in forward
+    input = module(input)
+  File "/home/federico/super-resolution-project/venv/lib/python3.12/site-packages/torch/nn/modules/activation.py", line 432, in forward
+    return torch.tanh(input)
+n
+tanh_1
+tanh_1_scale
+tanh_1_zero_pointtanh_1_QuantizeLinear_Outputtanh_1_QuantizeLinear"QuantizeLinear
+Š
+tanh_1_QuantizeLinear_Output
+tanh_1_scale
+tanh_1_zero_pointtanh_1_DequantizeLinear_Outputtanh_1_DequantizeLinear"DequantizeLinear
+›
+
+tanh_1_DequantizeLinear_Output
+*sub_pixel.0.weight_DequantizeLinear_Output
+sub_pixel.0.biasconv2d_2node_conv2d_2"Conv*
+group *
+pads@@@@ *
+auto_pad"NOTSET *
+strides@@ *
+	dilations@@ J›
+	namespace: models.espcn.ESPCN/sub_pixel: torch.nn.modules.container.Sequential/sub_pixel.0: torch.nn.modules.conv.Conv2d/conv2d_2: aten.conv2d.defaultJ˜
+pkg.torch.onnx.class_hierarchyv['models.espcn.ESPCN', 'torch.nn.modules.container.Sequential', 'torch.nn.modules.conv.Conv2d', 'aten.conv2d.default']JÅ
+pkg.torch.onnx.fx_nodeª%conv2d_2 : [num_users=1] = call_function[target=torch.ops.aten.conv2d.default](args = (%tanh_1, %p_sub_pixel_0_weight, %p_sub_pixel_0_bias, [1, 1], [1, 1]), kwargs = {})JJ
+pkg.torch.onnx.name_scopes,['', 'sub_pixel', 'sub_pixel.0', 'conv2d_2']Jğ
+pkg.torch.onnx.stack_traceÑFile "/home/federico/super-resolution-project/src/models/espcn.py", line 23, in forward
+    x = self.sub_pixel(x)
+  File "/home/federico/super-resolution-project/venv/lib/python3.12/site-packages/torch/nn/modules/container.py", line 253, in forward
+    input = module(input)
+  File "/home/federico/super-resolution-project/venv/lib/python3.12/site-packages/torch/nn/modules/conv.py", line 565, in forward
+    return self._conv_forward(input, self.weight, self.bias)
+x
+conv2d_2
+conv2d_2_scale
+conv2d_2_zero_pointconv2d_2_QuantizeLinear_Outputconv2d_2_QuantizeLinear"QuantizeLinear
+”
+conv2d_2_QuantizeLinear_Output
+conv2d_2_scale
+conv2d_2_zero_point conv2d_2_DequantizeLinear_Outputconv2d_2_DequantizeLinear"DequantizeLinear
+¿	
+ conv2d_2_DequantizeLinear_Outputpixel_shufflenode_pixel_shuffle"DepthToSpace*
+mode"CRD *
+	blocksize Jµ
+	namespace§: models.espcn.ESPCN/sub_pixel: torch.nn.modules.container.Sequential/sub_pixel.1: torch.nn.modules.pixelshuffle.PixelShuffle/pixel_shuffle: aten.pixel_shuffle.defaultJ®
+pkg.torch.onnx.class_hierarchy‹['models.espcn.ESPCN', 'torch.nn.modules.container.Sequential', 'torch.nn.modules.pixelshuffle.PixelShuffle', 'aten.pixel_shuffle.default']J™
+pkg.torch.onnx.fx_node%pixel_shuffle : [num_users=1] = call_function[target=torch.ops.aten.pixel_shuffle.default](args = (%conv2d_2, 2), kwargs = {})JO
+pkg.torch.onnx.name_scopes1['', 'sub_pixel', 'sub_pixel.1', 'pixel_shuffle']Jñ
+pkg.torch.onnx.stack_traceÒFile "/home/federico/super-resolution-project/src/models/espcn.py", line 23, in forward
+    x = self.sub_pixel(x)
+  File "/home/federico/super-resolution-project/venv/lib/python3.12/site-packages/torch/nn/modules/container.py", line 253, in forward
+    input = module(input)
+  File "/home/federico/super-resolution-project/venv/lib/python3.12/site-packages/torch/nn/modules/pixelshuffle.py", line 62, in forward
+    return F.pixel_shuffle(input, self.upscale_factor)
+¢
+pixel_shuffle
+val_4
+val_6output
+node_clamp"ClipJ;
+	namespace.: models.espcn.ESPCN/clamp: aten.clamp.defaultJN
+pkg.torch.onnx.class_hierarchy,['models.espcn.ESPCN', 'aten.clamp.default']J•
+pkg.torch.onnx.fx_node{%clamp : [num_users=1] = call_function[target=torch.ops.aten.clamp.default](args = (%pixel_shuffle, 0.0, 1.0), kwargs = {})J+
+pkg.torch.onnx.name_scopes['', 'clamp']J–
+pkg.torch.onnx.stack_tracexFile "/home/federico/super-resolution-project/src/models/espcn.py", line 24, in forward
+    x = torch.clamp(x, 0.0, 1.0)
+main_graph*Bval_4J    *Bval_6J  €?* *
+€ÿÿÿÿÿÿÿÿBinput_zero_point*"€€;Binput_scale**Bconv2d_zero_point*"”?=Bconv2d_scale*'* B feature_maps.0.weight_zero_point*%"éÀ<Bfeature_maps.0.weight_scale*î@Bfeature_maps.0.weight_quantizedJÀõô1ış6`*óà˜âèùõô òşÿı÷û
+úø	 ÷ı õûö 	öşôúş
+ùış	 ûûùù  ï
+ûæòîêñúì
+ şÿ  ÿÿÿôüÿøøşüıÿÿ ÿôù ÿığ  ÿú÷ùıÿ    ÿ  ÿÿ  ÿÿ şÿ ÿ ÿ ÿ ÿÿ ş ÿ ÿş ÿ     ÿ  şÿşş ÿÿÿÿ ÿıüìöÿûô
+ø÷óøıü òüü	şı÷óı	ò ùôúöıışä!ñë éÿÿüúûşóùùõúóú  ııÿÿûòú  üıÿ şÿ ò õúøö ğüûû üùÿÿ ö
+ ûışñ  üÿùü  òşûşôÿéõùøÿÿşóúûúôÑøñóœî ıãûúö şşş üüúüû ş  ı )Ùÿ[‘ò	ê üÿóÿ ÿ şÿÿÿ  şşş şòıÖøıóÊ	èBí ùò ÿÿÿÿş  ı ş ÿÿÿ   ô	 üüòù ÿ	 ôûşõ÷ö	ç ÿßúûùâşış ıøıù"f'ãÛÉìÜùğÿùóûüü÷ÿÿúü  ÿ ÿüşşü ı  ÿ       ÿş      ş şü ûğ
+	øıöÿÿÿúüüúşü÷ ôşş  îşü  ñüõüù üıùúüı şÿÿ úôıÿÿùıı ü ùÿ ÿúüü ÷
+úøüõ şııõùûğööşüö
+şÿÿü    ÿ ÿ   şÿ ÿ    ÿÿıüıûü ÿõÿüıú  ûôşÿ	
+ïúöëığ	ÿ û ış şøüşù
+ş ıÿ üûÿ şı÷ÿ
+û÷Ô õşõı ù÷ıùÿ ÷ııü ıùüÿÿ    ÿ şşş ı ÿşúıı öòşïııúôòşşş ÿşÿÿşşı ı ùåàÿ÷ÿ  ô	ôùù üôÿûù ş
+üöşûÿûüşıÚî1Ù	ú û ñ üñÊ-ï¼'ÿçşıøüı÷üıñú
+şıõøü  şÿşıÿış ıÿ ÿş şüÿ ÿş ıÿ ÿú  şÿÿ ÿ ÿş ÿÿ  ışÿÿÿÿıÿÿÿüÿÿşü ı ıÿ ÿıüúı ı   üÿ ÿş  ÿÿÿ ÿş ÿş ş ÿ ÿ ÿ şÿÿÿÿ şşış  şüÿÿıÿ ÿşÿı   ÿşü úÿùÿüôÿüÿ÷ ÿÿ  şÿ  ü ÿÿ  ı şş  ÿşşş   ÿÿÿ ÿÿ ÿÿ  ÿşÿÿ  ÿ ÿşşÿ÷ÿ ÷ïüşüü  ÿÿÿÿ ş şş ş ıÿ  ıüı	ø ğûı
+ıÿøı ÿ** Btanh_zero_point*"€ <B
+tanh_scale*#*
+åÿÿÿÿÿÿÿÿBconv2d_1_zero_point*"Õ>Bconv2d_1_scale*'* B feature_maps.2.weight_zero_point*%"Ş’<Bfeature_maps.2.weight_scale*¯ @Bfeature_maps.2.weight_quantizedJ€şúÆèßùúı÷Ñşù$×ù
+äşöøı 	%îßí şîùÿıÿÿÿ øşıüü ıÿüúú$ùŞóğõ+ĞñåøÇ%Ûúùÿı
+ëöü÷ùÿ÷ûô(Ûÿ.ìúôÚùÌõ÷0Û(ß÷ëÿíîëÿ	üüëşèÆöúı	öşşõ	ÿÌîèù	ø òÿÿ%îÿïôşùÚõíúüÂ'àúüòíøöûô÷ûü ûııÿÿï÷ûıÿÙğ  ù÷ğÿã"Ùúéóïöıñöøü/ñÙùúıùå
+öÿ üâ
+õúâôşüı&ùäñúóğõ÷ÿ ûêıøúôõÿö
+	íü	ûü	ıùíş÷çñîòçØ4±C'é÷ïñÿøşí·6È*ëøÿùùöùÿ  óïıû	ùõùşê÷öşş ÿ ôÿş ùüı	ú øø 	ıüöõ	ë'ğï		ù úışı şüüúşıÿúíÿşüéÿüúø ú ìäê ÿúéæŞøş ó	ùöì ûÿğşôôüô÷øôûõòèÿğğ	÷!û	÷ùüùıúÿøıùş ÷üù	÷şéçûã	ÿııü
+ñûæ
+òôûğ÷íòşéôæş	ü
+şäëùùùéóøä
+ÿòûııòı	üøøô
+şúúÿıù õıúÿÿşşû ÷úğõùÿôşú÷íğûşãŞıÿşşÿúû÷ı 	şşü÷ 
+ùû
+øóúáûüíæë 
+øÛßØ÷Ùêÿñøùû÷öûÿúïêçøöêöşúáüıñşòëçâùîìş÷ şù÷,íó÷ÿúşùúığüöşò÷óöÿö
+ûü áüÿ
+şñïÿóÿëôÿşş÷	ü ışøşşúÿğşöÿöÿ õşùÿÿûşÿù ıüş ù ü	üö   ÿñÿçíÿø şÿşÿıûğışÿ şúûôûóäëñëëøù
+ÿùşş	
+şúôÿüïú öòş
+ı	÷ıí
+ûÿüö ûúüÿ÷ıûï	íôışõıı ı úù	ûşû÷şşüıô ëí÷îûûä ıôüïÿşıø÷ìıæñøüú÷èüìø õ%ÿõ
+ë	óğöø	ü
+ğûõÿÿ	üıîü	ş û
+ïõõ
+ôşúşşúì
+û õòïì ùìü÷	÷şüøşÿùô ÷éÿşùÿó ıúÿùşøöıö
+şûñÿ÷õú şÿ 	îôıéõñşíğä	õ	ÿòñ
+ê ûï÷÷	ş
+óüşúıÿÿùş÷ğøöûÿşÿıõıüò÷ú
+
+ûşìúáù"îìñ ûøñõşïÿÿ	üûşüışùùıÿõöş ûú	÷üû÷ ÿ	ı	ûûşü úşÿ÷ ÿûûşúû şıüş  üı
+üûşúúş÷üşôø
+ÿÿÿÿøôúı 
+	 Ùäÿç(ëï	ßÒãïşûøéá6ëùèğïüşÿøùÿÿıüıõÛ5%ıëöìùÖ3æéöúğş'9öøøîÿãøöêóöô!÷ß	ôìıêâ øïÎ))ÛÿúğøôöÿòöèúıÒåô#5ş	øúù	 ıõüÿêôôÿïéÿ÷"ì÷ÿØõ
+:Ó³ßPáãêÿö /Şçïîï
+çúÿöûõ	úşßß4î"ÜùÿÊèê 0úùÖ
+şş÷Òê	í	ğö:Æÿúÿşô	ûêà
+ú8÷ò øÂAüóôúêşé/åèàô úîÍÿ÷ùÿ ëöş&ó'Õşşòõ
+å"üÊ Üê!éìÿ	ôìõ)¾!  ú
+êèèÓşä(ùüı
+æôùõîäø$#ßö	ğşêÿÿñÿêúğÚİğùıõ öøäçñ"úÿô÷îşõõ#Ò şı ú ôşü û î ñÿü	öóÿú
+÷üÿñé Ôè"üıöï
+í÷ÿóüõìõ	öúêıåŞşÿ	ÿíóóıüûüÿ ûşü
+ùıóş	 ìûöë	ÿûÿñóôüãìøùòûñışööçî(òóäïùòşÿûışşûÿíå	ôôôñ 	øüôøûöïúûòôı ÿúıéû
+öù
+úúÿşúüù
+õı İúòúú 
+ùæşûş ûìşïöı÷
+ÿøşÿ  ıùıı
+
+ÿãış àûşı
+òäø
+ñíü 
+óûÿùõÿï
+ıùÿò ıüş ûûæÚÿ èôüßı
+ ì 
+ñ ûìúçòúşÿşûöøüëøìüÿúúüõ÷ø øû
+àŞÔş+Ğô¬÷şúéãçığñßòğîşô÷şşöí÷ùùûòşş	şü÷òø ò ş ş÷	òü ıı	øòûù şşŞúûñÿ÷ë şşúÿô	ş
+ö üşü şüôûõîô õìşÿôüÿ	ôî(ûéêà û
+èü 
+ÿôışúøôúûşğûç
+şÿâíù÷úÿüúëÿèğü	ûûıÿÿ ÿûÿûÿ ûşûåÿûèùáöşöıîöêìè÷íòîçıèğşÿüóÿı	ûñ
+ôıÿäõ#Êışòü
+òöñûşïüß÷ ÿÿÿş şİ&÷íş üÿÿûô÷ÿ	ìüşğÖşßıñÿ şúÿîÿş  şúııÿù
+úûö
+
+ÿñ
+öóü÷úüôñ
+éş
+õ÷ ôÿ ûôı	ì
+îüüùùş şÿ ÿıÙøèôòöÿöø	ÿúõ÷êê%ãûøı
+ıû  ÿõıóÿ$ éıış	úÿûüõõ	ëÿëòóöóÍâó ó
+ıæ
+øÿùôîûôşúşüúûÿşúõñşüışòû şñùøøş ùû ı ûş÷üõü âûõ÷áışüşıù	 ıöÿùü şşùôûæëûíö ú ùõùôû
+	ôÃö-ìùâOß/êæõİ!
+:éÄ:Õ2¾(Ô3ØéøéôÜîÿöL¾
+ïûùòï÷ôóı òòôáÿË ù>$ÍkÏóôë;¸7ËÕØ(,‡eøóñëñòûîäñ÷îöîæ4,à)&ÛÄ5ëôéÖ+Ñı#ëİÏ æõääòóûä1ÒØ)æ.ğJ©3Î!Ï°'êó
+ôæü	 ×7Õ6¥6å ÷üùüóñÅ:!4/ÆæúKÖğ ö¸íü×Û <úñå-ì øğ÷úìÓãíÛ÷ãÿùô÷óÚJ >ŠÕó)N>ÿkÕö-ÊûÛäÍûØ%ÿ	ù÷	ûöã åğkÚÆû×ëİ63Àå÷tÓ*Ñâù'Ø áêşõüüø6Ó'óÏçëöşñù_¤7Ùå ä$>§3Ä×I0çæ4íKŞ(ÔıïéíÙ æøôäÿñîıÿöÌåöıñí¾/ğÒ÷íò	òíêòøèîö ùíş 	üÚ
+ñışê
+ ÿğæŞ“¡ıİü/$şûò÷íõúúööåëúüğÑêíãì
+ìÚöä5ñòÿûıöûşş÷óùõö	ûıú÷ùüÿ
+ ı÷ıúê ïôóşù ışşúışÿşûşş ú öÿûü ôüıïò şñ÷óüıüÿùóóöì
+ôùüû
+èŞïô öìÿèıüè éùÜ ÷üıışş ş
+ù	ığüøşöüü ÿ
+ıûşïõîğûıÿüòûöõ
+èöúòõÿıüÿúóñíıüúıüşùşøıñÿùõóú	ùùşú÷ñóöõõòôğşóìüüçıùüøüıüüöÿğòıÿıüö÷
+	ûÿúíşğæÿûèş ı ıÿıÿüıúúóøú øöü
+	òüùò÷úğŞ!şøùìêóşúø	ôíò÷şõùşÿøêõ ÿ ü÷ÿûúşôşöıüùùşş şııı
+óşÿúÿ ş
+øúõıÿíÿÿüı ü ûòÿııûúóâßõîã÷ÿúú÷ÿû	E1éÙBû+7#
+Ÿ1äÿìĞÜMş,#êüø“>.óşîü<àšk¦òéõûşş úõúşÿöı İı å C*
+¼ö8×C¦ .÷ãç
+Pú.ïGÁ½*ºãıôğÚÏÔñõşØÜİ<>ù×îõèöş*Ò2èùÒRôêãæÛĞçûúù=¦I'é8ôÉ×<ğæùõ
+ôË'ñ2Åßüçåç	>Åü×ñH6¼MØ>Ê)°)ÙãÏß+*"Œøµ÷çLçáÒPéùûîöşùïá,ùÀøú0ï÷Şşãö,á+‘cÜEWFûğ.(1ÇùçöêöBMş¹¿÷7Ì+õ ıÿ  
+êİîø3Şõó
+¸ß
+4ÌàÛ ²^¥Öøı&)ĞÈùıúôüÛ¼Pg".Ÿ ô
+óúğ±^¤@ß/¹& JŸûÍğPúª	Ş›DĞë!æëõêì2ãòäøîôğô%ØĞ&üşåòüñê,íŞúìöëä4êıFèëöéÿüş$á÷øüöôéıöõûÿ
+ú5óüøÿù ş÷ ÷	ñéû ÚñúñòŞÙÜõâıê"İçöúñêı	øßú÷ñä÷ûÿ	ë	Õøñóûşö
+ôğïùçûñ	÷ûúúúõ
+ ù û	÷şõ
+şäî÷øöúöÿîñê$÷í û øÒñşÿóîKĞòşÈşìñö ú	¯#êèëûóöñõÿà	ğ“ğøùí 	õşóßùãóèì ÿûİüÜ*á÷ã	õ-şâúçú ğù¿8üøÿêï öù ûüıÿÙ%ô ü.İìûúéşåôõüÿûÿşéíõïEúáÖşüú÷ !ëûûóü ñÿşøìëşøîçúûãúı#ßìóóûõ  ığşúşâôîòôüşë3áäßıö÷ëõööâà•2ô'æôîèõÿèñÓò#îøŞ	şüèûóüú÷ûúÿşêóı ı ÿû üøõş	ôüı ıï!ôñùø÷úö
+ôııùïû
+öõèüùûúú ìøøıï úõ úíõøî÷úüâî 	÷Ş÷òó ÿûÿ üıöüúûöúş÷	ş ïòùïşúùşôşü ıÿş  şüûúıüû ú ş
+ø÷ıõÿ 	ú÷ÿşÿü üÿú	÷ëö	üúÿ÷÷	ÿıÿü ÿıùş
+
+
+
+ÿÿışÿú şıü	üııÿÿúûùÿı ıúşûûş ÷ú 	ÿøÿşùÿÿÿúò	òûüÿÿşüü úüÿşú ö
+ ù÷üô ùûûùùıø÷÷ñü÷åü üüÿôÿú
+üüúÿıúşûûïûÿûüÿıúöşúüùÿşçûõú òïÿúûù ùû ùıùşü üøøô
+ şşşÿõü#éÿ ı
+ış
+ñÿ	÷ÿ   ü ş ÿüşüûıÿ øûú	úıú üışüÿşÿ ûûúÿ	ÿüışşğûú ÿÿÿııışûüûúÿòúÿşú ıışÿıÿüøıöõİú ú	÷õÿîÿâûíöïöò <âöòøúúüúıøşü şüıüû	ÿÿşõåóøúğñÿîôñê
+øşúı
+üûÿ÷üûúùù ñüóÿñÿûïıüşñøôñóô ôüìööûğùşùışûğıûæ ÿı ıùù÷õõøûö	øû é÷ïûÿıñóüóıû	şûşÿÿøı	 şòìïù íúóşî÷ïâôò÷5üıñõÿû	éşöøıÿıùøï
+÷ù÷	òùû şú	öåı÷ú õ÷ ıüúûúùöûôıÿşü 
+öûÿïñéõîó(î	%Ùë%ğüúìı	 Õıışüùøøÿüğ	şşÿü
+üû øÿöîõıü  şşÿşıÿ  şıû	ôø 
+ÿçüúıûü ıüô ı ış  şïıÿÿş ÿßè$
+îùğ"şáá  ñûüìİÌ3ûøØ  ç
+÷$şåòøüüÍúüûûÿôşúÿûş ÿ ûış  Ùñÿ,ÿîğå	îß,åú ööá ëöıüûù êõ	 öıéôğÿö ñÿÛıùåøæ
+õ æòøâîÿNUñèıÿúış âùúğøùşûÿıüÿôæúàî	öÿşïæÛëôôìùëíúîşÿúüö	ÿşõşÿä
+ÿö	Üø(öèôåğ0ÿï
+õ÷ó!óäÑüğşüæş 	ÿüü÷Úûõÿ(üâìğ	ûıë ññøùìûù÷úû/ı×üş÷	ø
+İ-øÍş  şûø üùğû ìÜîı Ìä AéÏæ44ßôáôéøÿïÛ4	ÿòıó 	óí÷ıæ	ô ûõôııûòáø÷ığıúúõøşıîüò	ûıê	ùşêùúäşÿùşøó óıùÿııüúüşüøøööÒşèá÷úşûùúüòğû ÿüşÿüöøşü÷ıóı	üõüîõûÿöÿ  ş ÿşÿÿÿşı	  û ûûúşıûùÿşışúù	øÿ
+ ışòüõşø
+ ú	ûëÿí	û şúóúûöÿşúÿşÿúü 	ñ şú ÿÿ ÿşÿ şÿ	şğııõışıÿ ÿú  ÿüôı÷
+ÿı û ü÷òÿúÿüşüÿùÿÿüş ûøûôÿøú ş şúışòşôÿğôéßóıüöış
+şşûüıùşÿÿşş÷ÿöîşüéôşú ü	ù ôèøüşşòşüı
+ÿÿıùó	õôûÿ  øÿıü÷ışÿşış ıî	 ıíÿÿ	ı üøò ııÿû ÷ı÷	ÿÿı üøúüüüşÿ û  öıışûúüÿÿú
+øüùııû ø	 şıü ü 	şüü ı ıÿşıùö òøûùÿÿÿü ú ÿüøÿôú÷+!şèòìúñú Şøèáı
+æóúíìòöıëøïúúûøü ş÷ÿşıò
+ô üö40øùåôì"á	òûú	æÿöô ÷ëûéğøøñıúêô!îæõ/õğáâéşêşöşú	
+ ùöòïöüôùÿşù1îşî
+÷ÿ ş÷ıòû ıô
+ò ßÍú ñòúö	áøúÿòôÿÿõøûşùÿıúş÷ıõ ÿ
+ üçõøùü÷
+ëÿ'ìò
+óùÿõ÷ì÷ÿûÿşûıüşşõö¿ïÿïñÿêüãô$ÿøæè íşöîøõ ÿÿò æÿû ÿı şòíıóôÿüÿşöğäèı	ğÿÿğ
+MÏñŞCÇ ØùıÛìé×ìûıôóïóúşöô   ıúûîûüÿÿ öøòû÷úşı÷ ıòùôş	úëÿşúğ
+ôü  õ
+ÿìö
+ôş÷ÿúõÿõúûîşò÷û  
+òû
++ı×õõ÷$ìşñôñ æøçöíã0â÷	ã ÚîÙùèÕ÷
+ùóã÷øòô	øş ûû
+ øø÷üıôÍù	÷!ıüş çÙÓüÙHıİâö ûàö÷	í óéèŞ áøõü
+ğéşêòêâşıùã5ö*Ú0÷üøó ö/ô	+æÙâüÿûüüşú÷íøÍìèñ.ëÿ÷ğ	ùÿúë'ÿ Õş ğûıôôıÿù
+ã:ı	Øÿÿüüé²ÿ
+ú	Úïô2
+ÙÎèğ÷òà	îúÿùôÿãù ùşä%âü0æ
+ëèè)æúúú÷ñöÙò'ëóòÉ!óøéóø	õ ûë,ïøèòüü úéóûü "şëıôû	é	MŠ&ïËR	
+ë¦Pï!íÿíøşúû	ÿüõò	ó
+ûÿøûùøûüù 
+àıúÿ÷ùùı	ö
+éüô
+ÿû  ğúÿ	÷üşú
+ÿ÷ıïóüüû	ø
+Ûøø÷ùù	ü"çâÿ ş
+ú	öıúôùõÿğ	üü
+õ ñÿ ş ğü	öõüòÿÿûüñÿ üû
+üşöÿÿ
+ûış  êù÷öï	ğş	şôü	 ÷üìıÿùù	öışüäüòèçüïÿ è÷ñõ ı
+ı&òïÿù úı
+
+âğ 	û  ùùù üùî	ü ÿşùèúùÿòùşşúîôÿõüíòöëıöşú  şû ÿşÿì ôıûõÿç	úûÿÿõ	ï øúçø	ş÷üö÷õüùÿıù ûüüü
+øôïôûùòüûúèô ğæôÿ øÿÿúû ÿşõöúşşûüùúùù	ùşãùèÂüñüüí"ø şüïìïıòö	ÿôüı úÿ ıüøÿÿÿûÿûı÷öúşü
+ııûüşûñÿÿ ıöì ûõ
+øüøìû	ÿûûôı	şûøÿ ı 	üşüÿ ôû÷ ÷ñşóó ıüöùıûøúûú 	ûû 
+úõ÷ı éÿÿùûüíãïü	ğııüşüÿ  ş şşÿ   ı ş æóûıÿşşİùûôó÷	úñ  şıÿøışşöşüùôõüëğùë
+üşóüúë	ıûüüûùÿòÿ  ııÿ÷şığ÷ü ùşõşüú	şÿ	õêöüüş	ğûú ş úşÿıı   ÿúüÿúÿìÙûöõ÷ıú÷şøğğ÷õùş
+ï  ÿÿüşÿıñîóóùşøûÿû	ó	'òìßøô üïşÿÿûşğıÿ ûıÿşıûúô
+øş÷ôú şåÎ$	4
+üø÷ÿãÿÿÿıÿıÿÿşú ÿşşş úüûüşıûÿşÿÿÿÿÿ   ıış  úûÿşù
+ëøó ıúş  ûûııÿışıüÿüüûşÿş ô
+øúğ ü
+ÿöşüı	õûşó	şóş	şôÿõı&Ríéõúùüÿúıü÷şûûÿüÿúüÿşÿìå÷ÿıö
+÷÷ø	şşê öş
+	èÿıışõ
+	ö óıÿıùÿú	óö	 ûü éûÿæêèôïòæßéú
+õúúêôüÿéÿú
+ ı ÿü ÿıÿúğı ûşü	îş÷úÿşÿïöùÿôøÿÿì
+ıíõÿşüşÿşşûı ı
+üüşûû÷		 Ùìüşùôùö	&84üşíıü ûöşû   á úûøô$şíöüøû	ıæù
+ 
+ıæ	÷ûùõ şşşûşûö ïşüÿûùşôşûû ı
+üõû÷
+ÀıíüöûıñüüıÇ	şüÿüûüøóıüş ıöü	ğıø	úı ıûüÿş ıüûşÿÿ úÿú÷şÿıöÎõ ÿöú
+ıü÷ı÷ÿúıÿúöò  ı ıúû÷ñìØÌÖëàíõşãìõç-ÿğùÿ ş;îôéêûú"ü úüşûöüïşşøüóıÔ2àìöóæøåòû#ñÜ8 ôê2üûî:ñä	õúñ öññùù+Üû	şì÷şéûùô!Ôğıöóø÷îìûù3Úş$&ìæïşÿûüşøÎîêôÿûù ùõğğ
+Ş%ãîá û«0Úä Çóôõ
+ûÿıüö ûşùøÊî ñä%ú÷úÛùùüåğ	êøÿÿõø şóúõûò
+êûÙıüû ú èùüõñÅùı	åßçù
+âÚ íüâ&îöü÷şøüÿÆ
+ïü*üìü÷ÿôéêûõïÿ
+ÿâüDÏëø\ËÊ'êşÛõâÃï+Öä.øùúş÷ùşğöøô÷ÿúøıíıõşéøí÷
+ôüşïşó	ü 
+ú!èîïú÷2Ñïâéğ úÿ
+ü ıûşş ıöûúûü÷õıûõü÷şş	ôùù(Ïüüîıôòûëÿşşıû÷	ÿø
+ïıÿ ş üü
+		êşø	ìööü	ş
+óöÿı  ûşüû şíòèõôøúõùÿşöş÷úÿ  øú÷ôìó÷ü ÿø
+ó ú ìòøøııı	
+ûÿ şÿ ùùışÿıú	ü÷ııóäóışş ÷ûüùÿöÿü óû	ú ÿûõşõ
+õşüÿşÿûş şÿÿô
+÷öü	ûÿø	üúûü  
+ öÿíÿ ó	íûşüòışşüïòö	  ôõ÷îüüúü ıïï	úçøãüÿ ÿ û  ïúùøü   şü÷	 ûğìşùıÿ ÿç ñ ûı
+ ÷ıôğóù÷ışõıüúÿÿşıÿşüõ ûş ÿışÿşşÿüúşúşşıüşş ûÿğñö ÿşıÿşüÿùûüûşşşÿ÷ôı   ÿşü ôôıúï7ôíòèòõîëïüü		õşüû$ ãıÿışó	ûşşıı şøıú32%ñàí îøéîÿùë
+ì'ş õùï
+òşù ÷õ
+ñ òöıôøúâõ)ìåìıùíùó ôó
+ùñ	óùú	ÿ
+øùù äİö
+îşöù üü
+	ïÿ ÿø#ìæâ
+ÿşó÷ì#ßøé ÷úúôüüş	÷ûüÿ úşşãğÜóûÿ	ıàõù#ü!ùØòì÷ íóë
+ÿìüıı øşå
+7÷ç øíöï ô éà	ÿøüé÷ÿ4ôÊ÷ïúø øü	ùÿıàè ùü ûóû áüñíí	é èõàOøøûıø÷ ôÉöø<şçíîı
+ôö ıñğ	ûûüù	úö
+ø ø øúÿ
+ûôõÿıôÿîïû	ÿù üø ó!ïúê ı	ùÿøú÷úõüùûûşøğüğõÿ şû÷ô òù òıìú şúù
+ùõûòÿúóøıõğüù şüøéè üúüö ùüú
+úıÿışÿüÿÿÿıçïõøôöûÿûúôôøı	í
+úõûù:ıöø	éöú öø÷öôúóşö÷ôúúıÿöùüíşó	û ı û÷úøùş÷ıüùìş ıÿøõøöììùø 
+øüêø÷şşô
+ùıøıÿùüşóüÿøúèøò öıÿè	ğöùøÛùçÿûüÿı÷ÿõşöÿ	ııü,şæşõúùóüüìÿóş!îéûëı÷ ì ÿ üü ÷éüÿıÿüşÿÿ ûøÿóòüùòüùÿ«ûC
+ú	 %å,ÿûşûş  üûşûş ııÿ÷üùıôúşı
+ùş÷  õøöôúü ÿ	ùğ	 ÿÿşşÿÿüı  úÿüı$H3ÿÿııúûîşşóûÿùú
+÷ıûõûıÿúÿøşşşóûó ñüñæ 	ù  úøùûüÿÿşÿ ÿıı şÿûüïööø	üıüøùöÿÿşÿışúòû ôúû öïÿı ıÿøüı øışóó	ÿû 
+ÿ ş
+ïıÿıûş÷
+şışı òğøöÿÿşÿı ıùışøùû	ùùıó
+şşıòşıı
+
+
+ïÿ ÿÿù ûışşùú	ıöÿîù ùöı 	ğìÚïï×ñô÷û	ô ÷óÿ ÿÿıÿ ıö	ö÷íü÷ ûùî	ùıõú	çö÷ıïñÿ	üÿ  üıõÿğÿ şûüÿûï õ	õú üúò-	Üú  şş÷÷òöö üú ıûıû ı üùúüıış şúû	 ÷üú ı ü ıüøıÿöüÿùøûıÿı ışûûÿ şş ûòùıô	úüşùãù÷
+ııñ÷ÿüğ	 
+üÿõüşù şú÷ÿışışış üÿş øşøñù ÷
+	 	üúûøÿîø÷òòøùöşüüø şùşñş÷ùûúõ÷õëôÿüûö÷éÊäÓ¹ÈáĞáûúÿşûûş÷úşş
+
+øûı +ùı ıùÿûøÿşùöø ûüú÷ı ÿÿúşı ş û÷
+ış		 òşöğûûùÿü	
+öûüôüúüşúöûşøş ôûö şûûşüÿøõûûúòúúÿüúÿúıùşôşøö÷şñÿ
+ü ÿûøø ûü úı÷ÿöúûşúøış ÿû 
+şÿûÿòø÷úøÿú
+ üğşùøÿòÿş ûòúşşûûúşúıù ÷ø üÿû üıû ş úıÿùüõëêî×ùóğöıõ ú	ıøı÷öõÿı ûüşÿüÿ ÿúüûúÿô÷ùõúúø÷ûù÷ü  ÿÿù		ıúñì ôÿÿ ıûÿü 
+ş ııÿ ÿ	 ıüıüÿıû 	ışúûÿüøûı õôöÿş ş 
+ 
+ùüş  ùõöúüõøù üù	ıışûùüúøôÿşû ûÿ ôüòôöõòğşôùÿúûÿâÒİÓ²ÖçÑâü ûö÷ış û	ü
+ûõııÿş.
+ûş÷ıûûú÷öıüñùıûÿ 	ûöşùşûşü	!  
+	ıúÿı÷üû%ıÿıóı÷ú øúıüııü ÿøõõûş
+ şüıúõñúùøüşÿüÿıû óıõğôùışöş ûøû÷ÿ
+ü ûûøşúşşııúöüùşş  üúøşşøúşûøıüÿõúûù
+÷ş÷ùñéñÿòõ÷ü ü÷ÿ÷ûşû ûùô öüÿ ÿòùõú
+ıùôşğåòåÛğòæó  şÿú÷ûöşü		ÿùñøøı ş ú
+ıúùöÿ ùöôıûúúô ıûşøış	
+û
+íùöùú÷ÿ
+òııø şúùışıì 	$ôùùÿ üıüü	úşşÿÿÿ ı ış óßòóûÿôÿé õ÷âá!÷şüşù÷ùú÷÷	üó ÿ ÿ 
+ùüûÿ	ıüığëó şşıüÿòûşòì
+ûú üÿööëşüı  üöş øõúüùúıôûñïòÿõ 
+ù÷	ê
+óûşÿüüşş ÿşû ûôüì
+ûşïôûÿûú÷ò	ÿóşäæàöııöüÿ
+øõôóúû ûÿÿï"şöóìøûúõ	ôöûÿöó÷äò$÷&úùóüÿıüÿıôø÷òù ı  ş
+ğşüóñòôûøÿ üìÓ*àÑ÷úúçíò  ë	âÔöùıüø	ş	ú üüş üùşıûíùÿ	ú õöı÷üÿıÿ   ÿ ôúüöÙø×ä÷şş  ü ùúşüÿşúış úøùï÷  ûı ëßÿëüêıøşéóøşóüü
+÷üöò 	úùøë
+ö Zğãç ÷ıò üış ù üı ûû üúîöúùí
+ûğÿüñõûÿõûòÿóşîıõşü÷ıê÷ıùôùö	ì	õóöööôïğßïñ÷ùòû	÷ğüû÷üÿşÿôıı úûıûıúøûúıêï
+
+ú 	
+   õøöñşüûş ú ôÿş
+÷ú	ğåşôùÿúüí ï ğÜEğ/éõ
+ÿõõıúñòøõ ÿ ûüş
+ş)õÈüşôü÷üı
+øóüşıéïõñø%ÿôè ûû øûşúş ú ûııÿëûöóÿõøöñûş7ÉìıI	 ô
+øş
+Ó	ùıü ııûÿÿò ıúı ú÷ùıøøÿüüü÷şıııÿû÷ş	ù	âê ÿÿşÿÿşıÿıüûüıíÿüóÿõùşü ï2öıííå%  ûæï ôóñ
+ü)ãñÿß.ôòñİğ 
+Ûå	ñó&	íñúùõûöûı úûùûûÿåïöïç0ìüøòûà	¿#îúúÿûëáïô
+ò èü
+Ôäù
+÷ù
+Îö	ä÷	öåïûüúnêó÷üïNéçüáíî
+êşößü÷åÇ#æùûøêüöæå	óú ıüùÿûø÷şşÿÿíşşüïûùÍ$ÉüıòóÿÆëÙãëúıøü
+÷ğŞ öııú÷ é ıëûåîë÷ôıŞûö÷&ßçëöñÿÿ ûûïâ%ôÿõÏØğé ßÎc™êõú,Ùõ½60êçÿíùøıãøıúè îóüıîşùúûûş òûÿõ÷ıüı
+ûøÿøøöúæû&şêûù úõñõõõş ùüùĞíòöõÿ ûüñò÷Ü.ôê*îâŞØö
+Ø
+ÙìØøÜëğşüÜ)óòöíòÜòûù	ñö
+	ûşúûùô	ÿò	ãÎ#ü	îñûş>şüæìõùıõñûõşîñéø
+èş/ïÿéş èä÷è4ïõøÛ÷	íôúûé	ì(Iÿİİîöñÿ	õö	ö èêñ	òöúøûÜò	ÿõÎï7ãú?÷	ùò)Úòõ+óğñ
+ õ úûÿûùüø öæÜ,	úÛìô4òÎó6ïÚïëäßãáö Úëú$ãõÙùğõÿşúù÷÷!óíÿğéÕ%!Õ
+
+íÑò/4åëçñíúşÛôìõåÿøúü
+Öğÿ'ñõøïò ù%'şàêõò#ñüÛ	ö÷	4öäî´öï[ìóıìúşùÍôè&æõğûÜ&ıı÷äôõù ÿîøşó	õëöñü êğÿ û ïşòô
+ù	 ø"ğëôèùõûûíóıóäÿé÷úûù óóöÿï÷ôôôÿ	
+Ôıîş	   ÿû ÷ÿşø	õÿ	ùıø ùıó
+ı
+è öëí ïõøıù	üıü ÿûÿ ıÿÿÿ ı ı  óúñùşòó ıùó÷ßûûşøü öÿ
+öôôııøşüşøÿøúóüı÷üÿûú÷ûÿ	 şıôıíø
+øöÿ ü ÿ şúõıÿı üÿ øÿÿüùùşëøÿû şş ü ööûúşÿûÿ  ış ÿşÿıÿÿ üö åü
+şıøş üôşûúı	ÿîşıı üü÷ü  ıü üğöä÷úúïù	õı ş
+õõ	ÿşñü÷û÷ïóşş ÿÿ ÿşîüÿÿ  ù ÿù üü
+ ùù ÷üÿıüÿ ìüèıõ÷õûø òúşñãşşúşıÿüøş  ÿÿö ÿûÿÿşşü úşÿ   ş ûıı úü ÿüüÿ
+ø ùûÿùíÿüûÿş   ûı  ÿ ş ş÷şêğù÷şÿÿ ÿ÷öò üøøı ñıı ıı ûııöşù	ıùÿ	 ÿû
+íÿş
+öùüÿ şùı    şşÿÿışşğçùüòù ù ÿÿüüõÿø ü
+öşùÿüîö ûø ş  	ÿ	í øÿîöúöÿıõû÷üú	 ûşıÿÿÿÿşùğ÷úıù şûıÿûı
+ùòöûúşò
+
+õøşüûşışÿÿıÿÿşüşÿı
+ğøşïøü÷ ÿùÿîüûııõşı ııûúúçşøı úóıü÷şıóøıùîøøşıòåüüıüùøú	ü  ş üşıù÷û
+ûıÿşÿş6Ğø
+üş	ûşÜë÷ ü üÿşú 	ùúû ÿû÷úüı ûü ıı üışıÿşş úşü ù üìé ıÿùşşıüúû ş ıÿ  şøÿııı ü ÿıõ	õÿ÷õ*!*
+ÿÿÿÿÿÿÿÿÿBtanh_1_zero_point*"ƒ€ <Btanh_1_scale*#*
+±ÿÿÿÿÿÿÿÿBconv2d_2_zero_point*"“Á;Bconv2d_2_scale*$* Bsub_pixel.0.weight_zero_point*""3ä”:Bsub_pixel.0.weight_scale*«	 Bsub_pixel.0.weight_quantizedJ€	ÿóì ÷"ıæ
+íÚïÿâô ü
+ÿûñÿ
+÷ùÿ÷ûúúîûû.íİûş
+û ÿş úõîò1ŞîÿöÿóOúñåş	ä÷şÿûó ü Føü ÿïúú	ôüïú ôğÛëüÿÿˆ	 şıá÷Ğöôışıéÿùüø øøöÿşı	÷í õé	ìÜ  şóõ& ôıÿ
+ù2ûö
+ú1ùôÿşãüú úü æß ıûûõöû öÿûğğñïşöşòüëõùÿÿûèøı
+ô ôúßôğûşñ ü òışúïışşûù"ÿ÷ïôåõúâú*ı	ìûşñéÔò-ış
+úôÿıü	4 ÿïèùşğÿìÿı?ÿüüòşıû	ûòô ÿûíû¿îşÿêøó%
+ıóêñâîúöüÿğõüş õÿğıÿÿış	ÿï÷áö"Şá 	ıPòè/ü û1ÿÿúôüüíeú
+ìúñ	Çîúıé
+ÿÿÿúûÿüøúûöñ ù
+ÿòşõùñ 	ñõùôş&÷üîéÓ	î	òşış ü
+ûüíüïâú1íÿúö %ô%êğ0ßöòğıû	õÿ üÿ;û úÙıê	 öé   4ÿşûôüü	òşşåÿø êşìşø÷ø şûşúîüúúîÂè şï
+ì
+ õæóıû ûæüÿéÜ'óíúûû
+ıûû0ÿûù/
+ÿÿØ ö÷  ÷ñòïşı şö ïııúîû øÏôúü÷âîùøûşìñ  (ÿüøüÕ÷ø şğÿ ş÷	èışø
+şüíüúè)ğâôşşñûî#ıß%ïíû÷ïşü%	ÿóïùôûîø	$ôûÿ
+ü÷ù õôüûøï şÎùúîışü÷ûış ôÑæşşöÿõÿöô	«şúîø àå	ãúø 			-
+	0	ûşöî  şÿûçÿãû ÷íúÿüíöıı
+	íù
+	 ‰øù*¦@Bfeature_maps.0.bias_quantizedJ€-ïÿÿÿÿÿ   õöÿÿQ  6ÿÿÿş   õÿÿÿ   $  ×ıÿÿ…õÿÿ	   h  ÿÿÿÖÿÿÿLÿÿÿDäÿÿV   |     ‡  šÿÿÿKÿÿÿ+  •  ×  N   Ğşÿÿd   1  T   #  ëÿÿÿ¸şÿÿ  •øÿÿÿÿÿ;   £ıÿÿO  ´ÿÿÿJşÿÿåÿÿÿ  a   øÿÿç  ^ïÿÿ·   Ïÿÿÿy   éÿÿÿóÿÿÿn   œ  UşÿÿcûÿÿÙÿÿÿÿÿÿR   °   ÿÿÿ%  */B#feature_maps.0.bias_quantized_scaleJ¼ÒÀ8*/* B(feature_maps.0.bias_quantized_zero_point*¦ Bfeature_maps.2.bias_quantizedJ€/  4  ùéÿÿÑ	  „  2  û#    :$    Òÿÿÿ	  Äùÿÿ   	  ~  Díÿÿäüÿÿè  	  üÿÿ  §èÿÿÿÿÿÖ    º   1
+    û  D  %  */B#feature_maps.2.bias_quantized_scaleJqq9*/* B(feature_maps.2.bias_quantized_zero_point*2Bsub_pixel.0.bias_quantizedJ	  z  `  ®  *,B sub_pixel.0.bias_quantized_scaleJ°y7*,* B%sub_pixel.0.bias_quantized_zero_pointZĞ
+input!
+
+
+
+height
+width"=
+/pkg.torch.export.graph_signature.InputSpec.kind
+USER_INPUT"=
+5pkg.torch.export.graph_signature.InputSpec.persistentNone"&
+!pkg.torch.onnx.original_node_namexbœ
+output%
+#
+
+
+
+2*height
+	2*width"?
+0pkg.torch.export.graph_signature.OutputSpec.kindUSER_OUTPUT"*
+!pkg.torch.onnx.original_node_nameclampjê
+feature_maps.0.weight
+
+@
+
+
+"<
+/pkg.torch.export.graph_signature.InputSpec.kind	PARAMETER"=
+5pkg.torch.export.graph_signature.InputSpec.persistentNone"<
+!pkg.torch.onnx.original_node_namep_feature_maps_0_weightjÚ
+feature_maps.0.bias
+
+
+@"<
+/pkg.torch.export.graph_signature.InputSpec.kind	PARAMETER"=
+5pkg.torch.export.graph_signature.InputSpec.persistentNone":
+!pkg.torch.onnx.original_node_namep_feature_maps_0_biasjê
+feature_maps.2.weight
+
+ 
+@
+
+"<
+/pkg.torch.export.graph_signature.InputSpec.kind	PARAMETER"=
+5pkg.torch.export.graph_signature.InputSpec.persistentNone"<
+!pkg.torch.onnx.original_node_namep_feature_maps_2_weightjÚ
+feature_maps.2.bias
+
+
+ "<
+/pkg.torch.export.graph_signature.InputSpec.kind	PARAMETER"=
+5pkg.torch.export.graph_signature.InputSpec.persistentNone":
+!pkg.torch.onnx.original_node_namep_feature_maps_2_biasjä
+sub_pixel.0.weight
+
+
+ 
+
+"<
+/pkg.torch.export.graph_signature.InputSpec.kind	PARAMETER"=
+5pkg.torch.export.graph_signature.InputSpec.persistentNone"9
+!pkg.torch.onnx.original_node_namep_sub_pixel_0_weightjÔ
+sub_pixel.0.bias
+
+
+"<
+/pkg.torch.export.graph_signature.InputSpec.kind	PARAMETER"=
+5pkg.torch.export.graph_signature.InputSpec.persistentNone"7
+!pkg.torch.onnx.original_node_namep_sub_pixel_0_biasjB
+val_4
+ "1
+$pkg.onnxscript.optimizer.folded_from	['val_3']jB
+val_6
+ "1
+$pkg.onnxscript.optimizer.folded_from	['val_5']j+
+conv2d!
+
+
+@
+height
+widthj)
+tanh!
+
+
+@
+height
+widthj-
+conv2d_1!
+
+
+ 
+height
+widthj+
+tanh_1!
+
+
+ 
+height
+widthj-
+conv2d_2!
+
+
+
+height
+widthj6
+pixel_shuffle%
+#
+
+
+
+2*height
+	2*width‚ß
+0pkg.torch.export.ExportedProgram.graph_signatureª
+# inputs
+p_feature_maps_0_weight: PARAMETER target='feature_maps.0.weight'
+p_feature_maps_0_bias: PARAMETER target='feature_maps.0.bias'
+p_feature_maps_2_weight: PARAMETER target='feature_maps.2.weight'
+p_feature_maps_2_bias: PARAMETER target='feature_maps.2.bias'
+p_sub_pixel_0_weight: PARAMETER target='sub_pixel.0.weight'
+p_sub_pixel_0_bias: PARAMETER target='sub_pixel.0.bias'
+x: USER_INPUT
+
+# outputs
+clamp: USER_OUTPUT
+‚]
+2pkg.torch.export.ExportedProgram.range_constraints'{s53: VR[0, int_oo], s0: VR[0, int_oo]}B
+ r
+
+onnx.inferonnxruntime.quantr+
+onnx.quant.pre_processonnxruntime.quant
