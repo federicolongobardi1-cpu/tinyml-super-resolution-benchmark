@@ -1,4 +1,28 @@
 venv/
+venv_camera/
+__pycache__/
+*.pyc
+*.log
+.DS_Store
+
+# Large datasets and generated outputs
+data/raw/DIV2K_valid_HR/
+data/calibration/
+data/outputs/
+
+# Optional large model sidecar files
+*.onnx.datavenv/
+venv_camera/
+__pycache__/
+*.pyc
+*.log
+.DS_Store
+
+data/raw/
+data/calibration/
+data/outputs/
+
+*.onnx.datavenv/
 __pycache__/
 *.pyc
 data/
