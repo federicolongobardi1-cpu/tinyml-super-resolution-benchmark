@@ -5,11 +5,14 @@ from pathlib import Path
 import cv2
 import numpy as np
 import onnxruntime as ort
+import torch
+from torchmetrics.image import VisualInformationFidelity
 
 
 INPUT_DIR = Path("data/raw/DIV2K_valid_HR")
-ONNX_PATH = Path("weights/Finetuned/640x640/espcn_x2_finetuned_640_dynamic.onnx")
-CSV_PATH = Path("results/espcn_onnx_summary.csv")
+ONNX_PATH = Path("weights/espcn_x2_finetuned_224_dynamic.onnx")
+CSV_PATH = Path("results/espcn_onnx_summary_vif.csv")
+PER_IMAGE_CSV = Path("results/espcn_onnx_per_image_vif.csv")
 
 N_RUNS = 30
 WARMUP_RUNS = 5
@@ -28,6 +31,20 @@ def psnr(pred, target):
     if mse == 0:
         return float("inf")
     return 20 * np.log10(255.0 / np.sqrt(mse))
+
+
+def compute_vif(pred, target, metric):
+    pred_t = torch.from_numpy(pred).float() / 255.0
+    target_t = torch.from_numpy(target).float() / 255.0
+
+    pred_t = pred_t.unsqueeze(0).unsqueeze(0)
+    target_t = target_t.unsqueeze(0).unsqueeze(0)
+
+    with torch.no_grad():
+        value = metric(pred_t, target_t)
+
+    metric.reset()
+    return float(value.item())
 
 
 def center_crop(img, crop_h, crop_w):
@@ -70,6 +87,8 @@ def benchmark(session, input_name, lr):
 
 
 def main():
+    metric = VisualInformationFidelity()
+
     session = ort.InferenceSession(
         str(ONNX_PATH),
         providers=["CPUExecutionProvider"]
@@ -81,9 +100,11 @@ def main():
 
     image_paths = sorted(INPUT_DIR.glob("*.png"))
     summary_rows = []
+    per_image_rows = []
 
     for lr_h, lr_w, hr_h, hr_w in RESOLUTIONS:
         psnr_values = []
+        vif_values = []
         latency_values = []
         fps_values = []
 
@@ -115,17 +136,30 @@ def main():
                 )
 
             score = psnr(sr, hr)
+            vif = compute_vif(sr, hr, metric)
 
             psnr_values.append(score)
+            vif_values.append(vif)
             latency_values.append(latency_ms)
             fps_values.append(fps)
 
             valid_images += 1
 
+            per_image_rows.append({
+                "image": path.name,
+                "method": "espcn_onnx",
+                "lr_resolution": f"{lr_w}x{lr_h}",
+                "hr_resolution": f"{hr_w}x{hr_h}",
+                "psnr": score,
+                "vif": vif,
+                "latency_ms": latency_ms,
+                "fps": fps,
+            })
+
             print(
                 f"{lr_w}x{lr_h} -> {hr_w}x{hr_h} | "
                 f"{path.name} | image {valid_images} | "
-                f"PSNR {score:.3f} dB | FPS {fps:.2f}",
+                f"PSNR {score:.3f} dB | VIF {vif:.4f} | FPS {fps:.2f}",
                 flush=True
             )
 
@@ -135,6 +169,7 @@ def main():
             )
 
         psnr_values = np.array(psnr_values)
+        vif_values = np.array(vif_values)
         latency_values = np.array(latency_values)
         fps_values = np.array(fps_values)
 
@@ -145,6 +180,8 @@ def main():
             "n_images": valid_images,
             "psnr_mean": psnr_values.mean(),
             "psnr_std": psnr_values.std(),
+            "vif_mean": vif_values.mean(),
+            "vif_std": vif_values.std(),
             "latency_ms_mean": latency_values.mean(),
             "latency_ms_std": latency_values.std(),
             "fps_mean": fps_values.mean(),
@@ -155,6 +192,7 @@ def main():
             f"\nSUMMARY | espcn_onnx | {lr_w}x{lr_h} -> {hr_w}x{hr_h} | "
             f"n={valid_images} | "
             f"PSNR {psnr_values.mean():.3f} ± {psnr_values.std():.3f} dB | "
+            f"VIF {vif_values.mean():.4f} ± {vif_values.std():.4f} | "
             f"Latency {latency_values.mean():.3f} ± {latency_values.std():.3f} ms | "
             f"FPS {fps_values.mean():.3f} ± {fps_values.std():.3f}\n",
             flush=True
@@ -170,6 +208,8 @@ def main():
                 "n_images",
                 "psnr_mean",
                 "psnr_std",
+                "vif_mean",
+                "vif_std",
                 "latency_ms_mean",
                 "latency_ms_std",
                 "fps_mean",
@@ -180,7 +220,26 @@ def main():
         writer.writeheader()
         writer.writerows(summary_rows)
 
+    with open(PER_IMAGE_CSV, "w", newline="") as f:
+        writer = csv.DictWriter(
+            f,
+            fieldnames=[
+                "image",
+                "method",
+                "lr_resolution",
+                "hr_resolution",
+                "psnr",
+                "vif",
+                "latency_ms",
+                "fps",
+            ],
+        )
+
+        writer.writeheader()
+        writer.writerows(per_image_rows)
+
     print(f"\nSummary saved to {CSV_PATH}")
+    print(f"Per-image results saved to {PER_IMAGE_CSV}")
 
 
 if __name__ == "__main__":

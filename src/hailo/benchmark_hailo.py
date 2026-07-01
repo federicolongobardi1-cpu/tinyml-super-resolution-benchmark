@@ -4,6 +4,8 @@ from pathlib import Path
 
 import cv2
 import numpy as np
+import torch
+from torchmetrics.image import VisualInformationFidelity
 
 from hailo_platform import (
     HEF,
@@ -19,7 +21,6 @@ from hailo_platform import (
 
 HEF_PATH = Path("weights/espcn_x2_finetuned_640_fixed.hef")
 INPUT_DIR = Path("data/raw/DIV2K_valid_HR")
-CSV_PATH = Path("results/espcn_hailo_summary.csv")
 
 N_RUNS = 30
 WARMUP_RUNS = 5
@@ -30,6 +31,20 @@ def psnr(pred, target):
     if mse == 0:
         return float("inf")
     return 20 * np.log10(255.0 / np.sqrt(mse))
+
+
+def compute_vif(pred, target, metric):
+    pred_t = torch.from_numpy(pred).float() / 255.0
+    target_t = torch.from_numpy(target).float() / 255.0
+
+    pred_t = pred_t.unsqueeze(0).unsqueeze(0)
+    target_t = target_t.unsqueeze(0).unsqueeze(0)
+
+    with torch.no_grad():
+        value = metric(pred_t, target_t)
+
+    metric.reset()
+    return float(value.item())
 
 
 def center_crop(img, crop_h, crop_w):
@@ -43,7 +58,6 @@ def center_crop(img, crop_h, crop_w):
 
 
 def get_hw_from_shape(shape):
-    # Hailo usually reports NHWC-like or HWC-like shapes.
     dims = list(shape)
 
     if len(dims) == 4:
@@ -69,6 +83,8 @@ def postprocess(output):
 
 def main():
     CSV_PATH.parent.mkdir(parents=True, exist_ok=True)
+
+    metric = VisualInformationFidelity()
 
     hef = HEF(str(HEF_PATH))
 
@@ -107,6 +123,7 @@ def main():
         print(f"Benchmark resolution: {lr_w}x{lr_h} -> {hr_w}x{hr_h}")
 
         psnr_values = []
+        vif_values = []
         latency_values = []
         fps_values = []
         valid_images = 0
@@ -120,7 +137,6 @@ def main():
         ) as infer_pipeline:
             with network_group.activate(network_group_params):
 
-                # Prepare first valid sample for warm-up
                 warmup_sample = None
 
                 for path in image_paths:
@@ -155,7 +171,10 @@ def main():
 
                     hr = center_crop(img, hr_h, hr_w)
                     if hr is None:
-                        print(f"Skipping {path.name}: too small for {hr_w}x{hr_h}", flush=True)
+                        print(
+                            f"Skipping {path.name}: too small for {hr_w}x{hr_h}",
+                            flush=True,
+                        )
                         continue
 
                     lr = cv2.resize(
@@ -184,12 +203,14 @@ def main():
                         )
 
                     score = psnr(sr, hr)
+                    vif = compute_vif(sr, hr, metric)
 
                     times = np.array(times)
                     latency_ms = times.mean() * 1000.0
                     fps = 1.0 / times.mean()
 
                     psnr_values.append(score)
+                    vif_values.append(vif)
                     latency_values.append(latency_ms)
                     fps_values.append(fps)
 
@@ -198,11 +219,12 @@ def main():
                     print(
                         f"{lr_w}x{lr_h} -> {hr_w}x{hr_h} | "
                         f"{path.name} | image {valid_images} | "
-                        f"PSNR {score:.3f} dB | FPS {fps:.2f}",
+                        f"PSNR {score:.3f} dB | VIF {vif:.4f} | FPS {fps:.2f}",
                         flush=True,
                     )
 
         psnr_values = np.array(psnr_values)
+        vif_values = np.array(vif_values)
         latency_values = np.array(latency_values)
         fps_values = np.array(fps_values)
 
@@ -213,6 +235,8 @@ def main():
             "n_images": valid_images,
             "psnr_mean": psnr_values.mean(),
             "psnr_std": psnr_values.std(),
+            "vif_mean": vif_values.mean(),
+            "vif_std": vif_values.std(),
             "latency_ms_mean": latency_values.mean(),
             "latency_ms_std": latency_values.std(),
             "fps_mean": fps_values.mean(),
@@ -226,10 +250,11 @@ def main():
 
         print("\nSUMMARY")
         print("-------")
-        print(f"method:          espcn_hailo")
+        print("method:          espcn_hailo")
         print(f"resolution:      {lr_w}x{lr_h} -> {hr_w}x{hr_h}")
         print(f"images:          {valid_images}")
         print(f"PSNR:            {psnr_values.mean():.3f} ± {psnr_values.std():.3f} dB")
+        print(f"VIF:             {vif_values.mean():.4f} ± {vif_values.std():.4f}")
         print(f"latency:         {latency_values.mean():.3f} ± {latency_values.std():.3f} ms")
         print(f"FPS:             {fps_values.mean():.3f} ± {fps_values.std():.3f}")
         print(f"CSV saved:       {CSV_PATH}")

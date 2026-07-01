@@ -1,140 +1,333 @@
 # TinyML Image Super-Resolution Benchmark
 
-Implementation and evaluation of a lightweight image super-resolution pipeline for edge AI applications using the Efficient Sub-Pixel Convolutional Neural Network (ESPCN). The project benchmarks traditional interpolation methods against deep learning implementations on Raspberry Pi 5 and the Hailo-8L AI accelerator.
-
-The project was developed as part of the **Internet of Things Laboratory** at the **University of Trento**.
-
----
+Benchmarking lightweight image super-resolution algorithms for Edge AI deployment on Raspberry Pi 5 and the Hailo-8L AI accelerator.
 
 ## Overview
 
-Image super-resolution reconstructs a high-resolution image from a low-resolution input. While traditional interpolation methods such as Nearest Neighbor and Bicubic are computationally efficient, they generally produce lower reconstruction quality than deep learning approaches.
+This project evaluates the feasibility of deploying lightweight deep learning super-resolution models on embedded hardware.
 
-This project evaluates the ESPCN architecture across multiple execution backends:
+The study compares traditional interpolation algorithms (Nearest Neighbor and Bicubic) with the Efficient Sub-Pixel Convolutional Neural Network (ESPCN) under different deployment backends:
 
-- Nearest Neighbor interpolation
-- Bicubic interpolation
-- ESPCN (PyTorch)
-- ESPCN (ONNX Runtime)
-- ESPCN (Hailo-8L)
-
-The comparison considers both reconstruction quality and embedded deployment performance.
-
----
-
-## Hardware
-
-The experimental platform consists of:
-
-- Raspberry Pi 5 (8 GB)
+- PyTorch
+- ONNX Runtime
 - Hailo-8L AI Accelerator
-- Raspberry Pi Camera Module 3
-- USB-C Power Meter
+
+The evaluation considers:
+
+- Reconstruction quality (PSNR and VIF)
+- Inference latency
+- Frames per second (FPS)
+- Power consumption
+- Energy per frame
+- Real-time camera deployment
+
+The complete methodology and experimental results are reported in the paper available in the `report/` directory.
 
 ---
 
-## Evaluation Metrics
+# Repository Structure
 
-The following metrics are evaluated:
-
-- PSNR (Peak Signal-to-Noise Ratio)
-- Latency
-- Frames Per Second (FPS)
-- Current Consumption
-- Power Consumption
-- Energy per Frame
-
----
-
-## Repository Structure
-
-```text
+```
 .
+├── archive/            # Auxiliary scripts used during development
 ├── data/
-│   ├── raw/                 # Input images
-│   ├── calibration/         # Calibration datasets
-│   └── outputs/             # Generated outputs
-│
-├── report/                  # Final report
-│
+│   ├── calibration/    # Hailo calibration datasets
+│   ├── outputs/        # Generated images and videos
+│   └── raw/            # DIV2K validation images
+├── report/             # IEEE paper
 ├── results/
-│   ├── csv/                 # Benchmark results
-│   ├── logs/                # Execution logs
-│   └── plots/               # Generated plots
-│
+│   ├── csv/
+│   ├── logs/
+│   └── plots/
 ├── src/
-│   ├── benchmark/           # Training, export and benchmark scripts
-│   ├── camera/              # Camera utilities
-│   ├── hailo/               # Hailo benchmarks and live demo
-│   ├── models/              # ESPCN architecture
-│   └── utils/               # Metrics and helper functions
-│
-└── weights/                 # Trained models and compiled HEF files
+│   ├── benchmark/
+│   ├── camera/
+│   ├── hailo/
+│   ├── models/
+│   └── utils/
+└── weights/
 ```
 
 ---
 
-## Main Scripts
+# Hardware
 
-### Traditional interpolation benchmark
+## Desktop
+
+Used for:
+
+- ESPCN fine-tuning
+- ONNX export
+- Calibration dataset generation
+- Hailo model compilation
+
+## Raspberry Pi 5
+
+Used for:
+
+- Traditional interpolation benchmark
+- PyTorch benchmark
+- ONNX Runtime benchmark
+- Hailo benchmark
+- Real-time camera demonstration
+
+Hardware configuration:
+
+- Raspberry Pi 5 (8 GB)
+- Hailo-8L AI Accelerator
+- Raspberry Pi Camera Module 3
+
+---
+
+# Installation
+
+Clone the repository:
+
+```bash
+git clone <repository-url>
+cd super-resolution-project
+```
+
+Create a Python virtual environment:
+
+```bash
+python3 -m venv venv
+source venv/bin/activate
+
+pip install -r requirements.txt
+```
+
+For Raspberry Pi, install the required HailoRT runtime together with the dependencies listed in `requirements.txt`.
+
+---
+
+# Experimental Workflow
+
+The complete workflow adopted in this project is illustrated below.
+
+```
+Desktop
+│
+├── Fine-tuning ESPCN
+├── Export to ONNX
+├── Calibration dataset generation
+└── HEF compilation
+                │
+                ▼
+Raspberry Pi 5
+│
+├── Traditional benchmark
+├── PyTorch benchmark
+├── ONNX benchmark
+├── Hailo benchmark
+└── Live camera demonstration
+```
+
+All quantitative results reported in the paper were obtained directly on the Raspberry Pi 5 platform. Hailo measurements were performed on the same Raspberry Pi equipped with the Hailo-8L accelerator.
+
+---
+
+# Model Preparation
+
+The adopted workflow is:
+
+```
+Pre-trained ESPCN
+        │
+        ▼
+Fine-tuning (DIV2K)
+        │
+        ▼
+PyTorch model
+        │
+        ▼
+Export to ONNX
+        │
+        ▼
+Calibration dataset generation
+        │
+        ▼
+HEF compilation
+```
+
+The calibration datasets used during Hailo optimization are stored in:
+
+```
+data/calibration/
+```
+
+---
+
+# Hailo Deployment
+
+The Hailo models were generated using the Hailo AI Software Suite running inside the official Docker environment.
+
+The deployment workflow consisted of:
+
+1. Exporting the fine-tuned ESPCN model to ONNX.
+2. Generating a calibration dataset from DIV2K.
+3. Performing INT8 optimization.
+4. Compiling the optimized model into a HEF executable.
+
+The repository provides the final compiled models:
+
+```
+weights/espcn_x2_finetuned_224_fixed.hef
+weights/espcn_x2_finetuned_640_fixed.hef
+```
+
+The intermediate HAR, ALLS and compiler configuration files generated during the Hailo compilation process are not included in this repository. Therefore, the repository provides the final HEF models together with the scripts used for their evaluation.
+
+The 224×224 model was successfully compiled using Hailo optimization level 2.
+
+The 640×640 model exceeded the optimization constraints of the Hailo compiler and could only be compiled using optimization level 0. Consequently, the resulting HEF provides a functional deployment but lower reconstruction quality than the optimized model.
+
+---
+
+# Running the Benchmarks
+
+All benchmarks below were executed on Raspberry Pi 5.
+
+## Traditional interpolation
 
 ```bash
 python src/hailo/benchmark_traditional.py
 ```
 
-### PyTorch benchmark
+## PyTorch
 
 ```bash
 python src/hailo/benchmark_pytorch.py
 ```
 
-### ONNX Runtime benchmark
+## ONNX Runtime
 
 ```bash
 python src/hailo/benchmark_onnx.py
 ```
 
-### Hailo benchmark
+## Hailo-8L
 
 ```bash
 python src/hailo/benchmark_hailo.py
 ```
 
-### Live Hailo demonstration
+Benchmark results are automatically saved inside
+
+```
+results/csv/
+```
+
+---
+
+# Real-Time Demonstration
+
+The live demonstration uses the Raspberry Pi Camera Module 3 together with the Hailo-8L accelerator.
+
+Pipeline:
+
+```
+Camera
+    │
+    ▼
+Grayscale conversion
+    │
+    ▼
+ESPCN (Hailo)
+    │
+    ▼
+Super-resolved frame
+    │
+    ▼
+MJPEG streaming
+    │
+    ▼
+Remote visualization
+```
+
+Run:
 
 ```bash
 python src/hailo/demo_hailo_mjpeg.py
 ```
 
-The live demo captures frames from the Raspberry Pi Camera Module 3, performs ×2 image super-resolution using the Hailo-8L accelerator, and streams the output to a remote computer through an MJPEG server.
+The live demo continuously reports:
+
+- FPS
+- Acquisition time
+- Pre-processing time
+- Hailo inference time
+- Post-processing time
+- JPEG encoding time
+- CPU utilization
+- Memory utilization
 
 ---
 
-## Main Results
+# Main Results
 
-The experimental evaluation shows that:
+The project evaluates:
 
-- ESPCN consistently improves PSNR over traditional interpolation methods.
-- ONNX Runtime significantly accelerates inference compared with native PyTorch.
-- The Hailo-8L accelerator achieves the highest throughput while maintaining low power consumption.
-- The complete live pipeline reaches real-time performance (>30 FPS at 224×224 input resolution), exceeding the project target of 15 FPS.
+- PSNR
+- Visual Information Fidelity (VIF)
+- Latency
+- FPS
+- Power consumption
+- Energy per frame
+
+Measurements were collected for:
+
+- Nearest Neighbor
+- Bicubic
+- ESPCN (PyTorch)
+- ESPCN (ONNX Runtime)
+- ESPCN (Hailo-8L)
+
+using the following input resolutions:
+
+- 64×64
+- 112×112
+- 224×224
+- 480×640
+- 640×640
 
 ---
 
-## Report
+# Weights
 
-The complete technical report describing the methodology, experimental evaluation, and conclusions is available in:
+Included models:
 
-```text
+```
+weights/
+├── Original Weights/
+├── Finetuned/
+├── espcn_x2_finetuned_224_fixed.hef
+└── espcn_x2_finetuned_640_fixed.hef
+```
+
+---
+
+# Report
+
+The complete technical report describing:
+
+- methodology,
+- implementation,
+- benchmarking procedure,
+- deployment,
+- experimental evaluation,
+- discussion,
+
+is available in
+
+```
 report/
 ```
 
 ---
 
-## Author
+# Acknowledgments
 
-**Federico Longobardi**
+This project was developed as part of the TinyML Image Super-Resolution Benchmark project at the University of Trento.
 
-Master's Degree in Autonomous Systems and Intelligent Robots
-
-University of Trento
+The ESPCN implementation is based on the open-source PyTorch implementation released by Lornatang and the original ESPCN architecture proposed by Shi et al.
